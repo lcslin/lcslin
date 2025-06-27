@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BNext AI FC 問答工具</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .input-section {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: translateY(-1px);
+        }
+        .iframe-container {
+            position: relative;
+            width: 100%;
+            height: 800px;
+            border: none;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .note {
+            padding: 10px 20px;
+            background: #e3f2fd;
+            color: #1565c0;
+            font-size: 14px;
+            border-left: 4px solid #2196f3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 BNext AI FC 問答工具</h1>
+            <p>AI TAIWAN 未來商務展相關問答</p>
+        </div>
+        
+        <div class="input-section">
+            <div class="input-group">
+                <label for="questionInput">輸入您的問題：</label>
+                <input type="text" 
+                       id="questionInput" 
+                       placeholder="例如：AI TAIWAN 未來商務展今年以什麼為主軸？"
+                       value="AI TAIWAN 未來商務展今年以什麼為主軸？">
+            </div>
+            <button onclick="updateIframe()">🔍 查詢</button>
+        </div>
+        
+        <div class="note">
+            💡 <strong>使用說明：</strong>在上方輸入框中輸入您的問題，點擊查詢按鈕即可在下方iframe中顯示結果。系統會自動移除不必要的UTM追蹤參數。
+        </div>
+        
+        <div class="iframe-container">
+            <iframe id="contentFrame" 
+                    src="https://ai-fc.bnext.com.tw/answer?t=AI%20TAIWAN%20%E6%9C%AA%E4%BE%86%E5%95%86%E5%8B%99%E5%B1%95%E4%BB%8A%E5%B9%B4%E4%BB%A5%E4%BB%80%E9%BA%BC%E7%82%BA%E4%B8%BB%E8%BB%B8%EF%BC%9F&pkey=3b34dae3-00303300"
+                    title="BNext AI FC 回答"></iframe>
+        </div>
+    </div>
+
+    <script>
+        function updateIframe() {
+            const questionInput = document.getElementById('questionInput');
+            const iframe = document.getElementById('contentFrame');
+            
+            if (questionInput.value.trim() === '') {
+                alert('請輸入問題內容');
+                return;
+            }
+            
+            // 建構URL，移除UTM參數
+            const baseUrl = 'https://ai-fc.bnext.com.tw/answer';
+            const encodedQuestion = encodeURIComponent(questionInput.value);
+            const pkey = '3b34dae3-00303300';
+            
+            const newUrl = `${baseUrl}?t=${encodedQuestion}&pkey=${pkey}`;
+            
+            // 更新iframe src
+            iframe.src = newUrl;
+            
+            console.log('Updated URL:', newUrl);
+        }
+        
+        // 頁面載入時執行一次
+        document.addEventListener('DOMContentLoaded', function() {
+            updateIframe();
+        });
+        
+        // 支援Enter鍵查詢
+        document.getElementById('questionInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                updateIframe();
+            }
+        });
+    </script>
+</body>
+</html>
